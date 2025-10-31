@@ -34,12 +34,33 @@ def _all_problems(filenames):
       yield problem
 
 
+# def _print_names_and_sources(filenames):
+#   # """Prints the names and sources of all ContestProblems in filenames."""
+#   # for problem in _all_problems(filenames):
+#   #   print(
+#   #       contest_problem_pb2.ContestProblem.Source.Name(problem.source),
+#   #       problem.name)
+#   for problem in _all_problems(filenames):
+#       print("Problem:", problem.name)
+#       for sol in problem.solutions:
+#           print("  Language:", sol.language)
+#           # print("  Code:\n", sol.solution)
+
 def _print_names_and_sources(filenames):
-  """Prints the names and sources of all ContestProblems in filenames."""
-  for problem in _all_problems(filenames):
-    print(
-        contest_problem_pb2.ContestProblem.Source.Name(problem.source),
-        problem.name)
+    for problem in _all_problems(filenames):
+        source_name = contest_problem_pb2.ContestProblem.Source.Name(problem.source)
+        problem_name = problem.name
+
+        # 正确解（pass）
+        for sol in problem.solutions:
+            lang_name = contest_problem_pb2.ContestProblem.Solution.Language.Name(sol.language)
+            print(f"{source_name}\t{problem_name}\t{lang_name}\tPASS")
+
+        # 错误解（fail）
+        for sol in problem.incorrect_solutions:
+            lang_name = contest_problem_pb2.ContestProblem.Solution.Language.Name(sol.language)
+            print(f"{source_name}\t{problem_name}\t{lang_name}\tFAIL")
+
 
 
 if __name__ == '__main__':
